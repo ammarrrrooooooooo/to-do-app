@@ -53,7 +53,10 @@ class Task:
 class TaskManager:
     def __init__(self):
         self.tasks: List[Task] = []
-        self.filename = "tasks.json"
+        # Update path for Replit
+        self.filename = os.path.join(os.getcwd(), 'data', 'tasks.json')
+        # Ensure data directory exists
+        os.makedirs(os.path.dirname(self.filename), exist_ok=True)
         self.load_tasks()
 
     def add_task(self, title: str, description: str, due_date: str, priority: str = "Medium", tags: List[str] = None) -> Dict:
@@ -220,9 +223,10 @@ def get_statistics():
     return jsonify(task_manager.get_statistics())
 
 if __name__ == '__main__':
-    # Get port from environment variable or default to 5000
+    # Get port from Replit environment or default to 5000
     port = int(os.environ.get('PORT', 5000))
-    # In production, don't use debug mode
-    debug = os.environ.get('FLASK_ENV') == 'development'
-    # Host='0.0.0.0' makes the server externally visible
-    app.run(host='0.0.0.0', port=port, debug=debug) 
+    # Run with host='0.0.0.0' to make it accessible from Replit
+    app.run(host='0.0.0.0', port=port)
+
+# Add this for PythonAnywhere WSGI
+application = app 

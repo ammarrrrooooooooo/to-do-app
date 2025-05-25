@@ -1,0 +1,29 @@
+run = "python app.py"
+entrypoint = "app.py"
+
+# Packaging
+[packager]
+language = "python3"
+ignoredPackages = ["unit_tests"]
+
+[packager.features]
+enabledForHosting = true
+packageSearch = true
+guessImports = true
+
+# Languages
+[languages.python3]
+pattern = "**/*.py"
+syntax = "python"
+
+[languages.python3.languageServer]
+start = ["pylsp"]
+
+# Nix
+[nix]
+channel = "stable-22_11"
+
+# Hosting
+[deployment]
+run = ["python3", "app.py"]
+deploymentTarget = "cloudrun" 
