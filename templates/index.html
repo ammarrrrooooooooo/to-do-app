@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المهام المتقدم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-tasks"></i> نظام إدارة المهام المتقدم</h1>
+                <p class="header-stats">
+                    المهام النشطة: <span id="activeTasks">0</span> | 
+                    المهام المكتملة: <span id="completedTasks">0</span> |
+                    إجمالي المهام: <span id="totalTasks">0</span>
+                </p>
+            </div>
+            <button id="addTaskBtn" class="btn primary"><i class="fas fa-plus"></i> مهمة جديدة</button>
+        </header>
+
+        <div class="dashboard">
+            <div class="search-bar">
+                <input type="text" id="searchTasks" placeholder="البحث في المهام..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-status="all"><i class="fas fa-list-ul"></i> جميع المهام</button>
+                <button class="filter-btn" data-status="Pending"><i class="fas fa-clock"></i> المهام المعلقة</button>
+                <button class="filter-btn" data-status="Completed"><i class="fas fa-check-circle"></i> المهام المكتملة</button>
+                <select id="sortTasks" class="sort-select">
+                    <option value="date-desc">الأحدث أولاً</option>
+                    <option value="date-asc">الأقدم أولاً</option>
+                    <option value="priority-desc">الأولوية: من الأعلى</option>
+                    <option value="priority-asc">الأولوية: من الأدنى</option>
+                    <option value="due-date">تاريخ الاستحقاق</option>
+                </select>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div id="taskProgress" class="progress-fill" style="width: 0%">0%</div>
+                </div>
+                <p class="progress-text">نسبة إنجاز المهام</p>
+            </div>
+
+            <div id="tasksList" class="tasks-list">
+                <!-- Tasks will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing task -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">إضافة مهمة جديدة</h2>
+                <button class="close-btn" id="closeModal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="taskForm">
+                <input type="hidden" id="taskId" value="">
+                <div class="form-group">
+                    <label for="title"><i class="fas fa-heading"></i> عنوان المهمة:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-align-left"></i> وصف المهمة:</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="due_date"><i class="fas fa-calendar"></i> تاريخ الاستحقاق:</label>
+                        <input type="datetime-local" id="due_date" name="due_date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priority"><i class="fas fa-flag"></i> الأولوية:</label>
+                        <select id="priority" name="priority">
+                            <option value="High">عالية</option>
+                            <option value="Medium" selected>متوسطة</option>
+                            <option value="Low">منخفضة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tags"><i class="fas fa-tags"></i> الوسوم:</label>
+                    <input type="text" id="tags" name="tags" placeholder="أضف وسوماً مفصولة بفواصل">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn primary"><i class="fas fa-save"></i> حفظ</button>
+                    <button type="button" class="btn secondary" id="resetForm"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <h3 id="confirmTitle">تأكيد العملية</h3>
+            <p id="confirmMessage"></p>
+            <div class="confirm-actions">
+                <button id="confirmYes" class="btn danger"><i class="fas fa-check"></i> نعم</button>
+                <button id="confirmNo" class="btn secondary"><i class="fas fa-times"></i> لا</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
